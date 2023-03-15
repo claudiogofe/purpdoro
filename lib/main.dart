@@ -72,11 +72,11 @@ class _MyAppState extends State<MyApp> {
   }
 
   _reset() {
-    _timer!.cancel();
     setState(() {
       currentSession = 1;
       remaining = timers["work"]! * 60;
       paused = true;
+      _timer = null;
     });
   }
 
