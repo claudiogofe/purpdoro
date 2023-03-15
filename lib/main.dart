@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         paused = false;
       });
-      _timer = Timer.periodic(const Duration(seconds: 1), (Timer _timer) {
+      _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
         if (remaining == 0) {
           _skipSession();
         } else {
