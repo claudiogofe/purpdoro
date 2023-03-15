@@ -72,7 +72,9 @@ class _MyAppState extends State<MyApp> {
       currentSession = 1;
       remaining = timers["work"]! * 60;
       paused = true;
-      _timer = null;
+      if (_timer != null && _timer!.isActive) {
+        _timer!.cancel();
+      }
     });
   }
 
