@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.helloflutter">
+    package="com.claudiogofe.purpmodoro">
    <application
-        android:label="helloflutter"
+        android:label="Purpmodoro"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
