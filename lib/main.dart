@@ -15,10 +15,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  _printStuff() {
-    print("Test");
-  }
-
   var paused = true;
   var sessionsBeforeLongBreak = 8;
   var currentSession = 1;
