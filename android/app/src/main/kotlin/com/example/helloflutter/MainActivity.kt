@@ -1,4 +1,4 @@
-package com.example.helloflutter
+package com.claudiogofe.purpmodoro
 
 import io.flutter.embedding.android.FlutterActivity
 
