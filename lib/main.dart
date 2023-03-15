@@ -15,85 +15,102 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var paused = true;
-  var sessionsBeforeLongBreak = 8;
-  var currentSession = 1;
-  var timers = {
+  var _paused = true;
+  var _sessionsBeforeLongBreak = 8;
+  var _currentSession = 1;
+  var _timers = {
     "work": 25,
     "break": 5,
     "longBreak": 15,
   };
-  int remaining = 25 * 60;
+  int _remaining = 25 * 60;
   Timer? _timer;
 
   _toggleTimer() {
-    if (paused || !_timer!.isActive) {
+    if (_paused || !_timer!.isActive) {
       setState(() {
-        paused = false;
+        _paused = false;
       });
       _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-        if (remaining == 0) {
+        if (_remaining == 0) {
           _skipSession();
         } else {
           setState(() {
-            remaining--;
+            _remaining--;
           });
         }
       });
     } else {
       _timer!.cancel();
       setState(() {
-        paused = true;
+        _paused = true;
       });
     }
   }
 
   _skipSession() {
     setState(() {
-      if (currentSession + 1 == sessionsBeforeLongBreak) {
-        currentSession += 1;
-        remaining = timers["longBreak"]! * 60;
-      } else if (currentSession == sessionsBeforeLongBreak) {
-        currentSession = 1;
-        remaining = timers["work"]! * 60;
-      } else if (currentSession == sessionsBeforeLongBreak ||
-          currentSession % 2 == 0) {
-        currentSession += 1;
-        remaining = timers["work"]! * 60;
+      if (_currentSession + 1 == _sessionsBeforeLongBreak) {
+        _currentSession += 1;
+        _remaining = _timers["longBreak"]! * 60;
+      } else if (_currentSession == _sessionsBeforeLongBreak) {
+        _currentSession = 1;
+        _remaining = _timers["work"]! * 60;
+      } else if (_currentSession == _sessionsBeforeLongBreak ||
+          _currentSession % 2 == 0) {
+        _currentSession += 1;
+        _remaining = _timers["work"]! * 60;
       } else {
-        currentSession += 1;
-        remaining = timers["break"]! * 60;
+        _currentSession += 1;
+        _remaining = _timers["break"]! * 60;
       }
     });
   }
 
   _reset() {
     setState(() {
-      currentSession = 1;
-      remaining = timers["work"]! * 60;
-      paused = true;
+      _currentSession = 1;
+      _remaining = _timers["work"]! * 60;
+      _paused = true;
       if (_timer != null && _timer!.isActive) {
         _timer!.cancel();
       }
     });
   }
 
+  _getSessionName() {
+    if (_currentSession % 2 == 0 &&
+        _currentSession < _sessionsBeforeLongBreak) {
+      return "Break";
+    } else if (_currentSession == _sessionsBeforeLongBreak) {
+      return "Long Break";
+    } else {
+      return "Work";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // debugPaintSizeEnabled = true
-    getSessionName() {
-      if (currentSession % 2 == 0 && currentSession < sessionsBeforeLongBreak) {
-        return "Break";
-      } else if (currentSession == sessionsBeforeLongBreak) {
-        return "Long Break";
-      } else {
-        return "Work";
-      }
-    }
 
     return MaterialApp(
         title: "Purpmodoro",
         home: Scaffold(
+            bottomNavigationBar: BottomNavigationBar(
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.timer_rounded),
+                  label: "Timer",
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.settings_rounded),
+                  label: "Settings",
+                )
+              ],
+              backgroundColor: Colors.deepPurple,
+              fixedColor: Colors.white,
+              unselectedItemColor: Colors.deepPurple[300],
+            ),
             appBar: AppBar(
               systemOverlayStyle: const SystemUiOverlayStyle(
                   statusBarColor: Colors.deepPurple,
@@ -117,7 +134,7 @@ class _MyAppState extends State<MyApp> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      getSessionName(),
+                      _getSessionName(),
                       style: TextStyle(
                         color: Colors.deepPurple.shade200,
                         fontWeight: FontWeight.bold,
@@ -125,7 +142,7 @@ class _MyAppState extends State<MyApp> {
                       ),
                     ),
                     Text(
-                      "${(remaining ~/ 60).toInt().toString().padLeft(2, "0")}:${(remaining % 60).toInt().toString().padLeft(2, "0")}",
+                      "${(_remaining ~/ 60).toInt().toString().padLeft(2, "0")}:${(_remaining % 60).toInt().toString().padLeft(2, "0")}",
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 64,
@@ -138,7 +155,7 @@ class _MyAppState extends State<MyApp> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         FilledButton.icon(
-                          icon: paused
+                          icon: _paused
                               ? Icon(Icons.play_circle_rounded)
                               : Icon(Icons.pause_circle_filled),
                           onPressed: _toggleTimer,
@@ -150,7 +167,7 @@ class _MyAppState extends State<MyApp> {
                                 EdgeInsets.symmetric(
                                     vertical: 16, horizontal: 16)),
                           ),
-                          label: Text(paused ? "Start" : "Pause"),
+                          label: Text(_paused ? "Start" : "Pause"),
                         ),
                         const SizedBox(
                           width: 8,
