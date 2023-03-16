@@ -140,9 +140,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   child: NumberPicker(
                     minValue: 1,
                     maxValue: 60,
-                    value: widget.sessionsBeforeLongBreak ~/ 2,
+                    value: widget.sessionsBeforeLongBreak,
                     onChanged: (newValue) {
-                      widget.setSessionsBeforeLongBreak(newValue * 2);
+                      widget.setSessionsBeforeLongBreak(newValue);
                     },
                     textStyle:
                         TextStyle(color: Colors.deepPurple[300], fontSize: 16),
