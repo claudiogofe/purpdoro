@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
     "break": 5,
     "longBreak": 15,
   };
-  var _sessionsBeforeLongBreak = 8;
+  var _sessionsBeforeLongBreak = 4;
 
   @override
   void initState() {
