@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:purpmodoro/settings_page.dart';
-import 'package:purpmodoro/timer_page.dart';
+import 'package:purpdoro/settings_page.dart';
+import 'package:purpdoro/timer_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -54,7 +54,12 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     // debugPaintSizeEnabled = true
     return MaterialApp(
-        title: "Purpmodoro",
+        title: "Purpdoro",
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.deepPurple,
+              accentColor: Colors.deepPurple[400]),
+        ),
         home: Scaffold(
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: currentPage,
@@ -85,7 +90,7 @@ class _MyAppState extends State<MyApp> {
             title: const SizedBox(
               width: double.infinity,
               child: Text(
-                "Purpmodoro",
+                "Purpdoro",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),

@@ -81,6 +81,12 @@ class _TimerPageState extends State<TimerPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _reset();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
         width: double.infinity,

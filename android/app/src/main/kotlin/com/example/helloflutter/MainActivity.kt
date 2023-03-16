@@ -1,4 +1,4 @@
-package com.claudiogofe.purpmodoro
+package com.claudiogofe.purpdoro
 
 import io.flutter.embedding.android.FlutterActivity
 

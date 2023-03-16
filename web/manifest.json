@@ -1,6 +1,6 @@
 {
-    "name": "purpmodoro",
-    "short_name": "purpmodoro",
+    "name": "purpdoro",
+    "short_name": "purpdoro",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
