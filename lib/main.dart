@@ -32,6 +32,63 @@ class _MyAppState extends State<MyApp> {
     pageController = PageController(initialPage: currentPage);
   }
 
+  var _paused = true;
+  var _currentSession = 1;
+  int _remaining = 25 * 60;
+  Timer? _timer;
+
+  _toggleTimer() {
+    if (_paused || !_timer!.isActive) {
+      setState(() {
+        _paused = false;
+      });
+      _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+        if (_remaining == 0) {
+          _skipSession();
+        } else {
+          setState(() {
+            _remaining--;
+          });
+        }
+      });
+    } else {
+      _timer!.cancel();
+      setState(() {
+        _paused = true;
+      });
+    }
+  }
+
+  _skipSession() {
+    setState(() {
+      if (_currentSession + 1 == _sessionsBeforeLongBreak * 2) {
+        _currentSession += 1;
+        _remaining = _timers["longBreak"]! * 60;
+      } else if (_currentSession == _sessionsBeforeLongBreak * 2) {
+        _currentSession = 1;
+        _remaining = _timers["work"]! * 60;
+      } else if (_currentSession == _sessionsBeforeLongBreak * 2 ||
+          _currentSession % 2 == 0) {
+        _currentSession += 1;
+        _remaining = _timers["work"]! * 60;
+      } else {
+        _currentSession += 1;
+        _remaining = _timers["break"]! * 60;
+      }
+    });
+  }
+
+  _reset() {
+    setState(() {
+      _currentSession = 1;
+      _remaining = _timers["work"]! * 60;
+      _paused = true;
+      if (_timer != null && _timer!.isActive) {
+        _timer!.cancel();
+      }
+    });
+  }
+
   _setCurrentPage(page) {
     setState(() {
       currentPage = page;
@@ -42,12 +99,14 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _timers = newTimers;
     });
+    _reset();
   }
 
   _setSessionsBeforeLongBreak(newValue) {
     setState(() {
       _sessionsBeforeLongBreak = newValue;
     });
+    _reset();
   }
 
   @override
@@ -103,12 +162,20 @@ class _MyAppState extends State<MyApp> {
             onPageChanged: _setCurrentPage,
             children: [
               TimerPage(
+                paused: _paused,
                 timers: _timers,
                 sessionsBeforeLongBreak: _sessionsBeforeLongBreak,
+                currentSession: _currentSession,
+                remaining: _remaining,
+                reset: _reset,
+                skipSession: _skipSession,
+                toggleTimer: _toggleTimer,
               ),
               SettingsPage(
                 setTimers: _setTimers,
                 timers: _timers,
+                sessionsBeforeLongBreak: _sessionsBeforeLongBreak,
+                setSessionsBeforeLongBreak: _setSessionsBeforeLongBreak,
               ),
             ],
           ),
