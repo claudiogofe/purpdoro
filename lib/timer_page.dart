@@ -29,13 +29,8 @@ class TimerPage extends StatefulWidget {
 
 class _TimerPageState extends State<TimerPage>
     with AutomaticKeepAliveClientMixin<TimerPage> {
-  bool get wantKeepAlive => true;
-
   @override
-  void initState() {
-    super.initState();
-    widget.reset();
-  }
+  bool get wantKeepAlive => true;
 
   _getSessionName() {
     if (widget.currentSession % 2 == 0 &&
@@ -50,6 +45,7 @@ class _TimerPageState extends State<TimerPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
         width: double.infinity,
         height: double.infinity,
