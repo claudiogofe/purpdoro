@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:purpdoro/settings_page.dart';
 import 'package:purpdoro/timer_page.dart';
 
+import 'package:audioplayers/audioplayers.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -25,6 +27,12 @@ class _MyAppState extends State<MyApp> {
     "longBreak": 15,
   };
   var _sessionsBeforeLongBreak = 4;
+  var _paused = true;
+  var _currentSession = 1;
+  int _remaining = 25 * 60;
+  Timer? _timer;
+
+  final alarmAudioPlayer = AudioPlayer();
 
   @override
   void initState() {
@@ -32,10 +40,13 @@ class _MyAppState extends State<MyApp> {
     pageController = PageController(initialPage: currentPage);
   }
 
-  var _paused = true;
-  var _currentSession = 1;
-  int _remaining = 25 * 60;
-  Timer? _timer;
+  _playAlarmSound() async {
+    await alarmAudioPlayer
+        .setSource(AssetSource("sounds/alarm.mp3"))
+        .then((value) {
+      alarmAudioPlayer.resume();
+    });
+  }
 
   _toggleTimer() {
     if (_paused || !_timer!.isActive) {
@@ -45,6 +56,7 @@ class _MyAppState extends State<MyApp> {
       _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
         if (_remaining == 0) {
           _skipSession();
+          _playAlarmSound();
         } else {
           setState(() {
             _remaining--;
