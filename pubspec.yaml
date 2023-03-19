@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   numberpicker: ^2.1.1
   audioplayers: ^3.0.1
+  awesome_notifications: ^0.7.4+1
 
 dev_dependencies:
   flutter_test:

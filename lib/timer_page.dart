@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 class TimerPage extends StatefulWidget {
   final bool paused;
@@ -10,6 +9,7 @@ class TimerPage extends StatefulWidget {
   final VoidCallback reset;
   final VoidCallback toggleTimer;
   final VoidCallback skipSession;
+  final String Function() getSessionName;
 
   const TimerPage({
     super.key,
@@ -21,6 +21,7 @@ class TimerPage extends StatefulWidget {
     required this.reset,
     required this.toggleTimer,
     required this.skipSession,
+    required this.getSessionName,
   });
 
   @override
@@ -31,17 +32,6 @@ class _TimerPageState extends State<TimerPage>
     with AutomaticKeepAliveClientMixin<TimerPage> {
   @override
   bool get wantKeepAlive => true;
-
-  _getSessionName() {
-    if (widget.currentSession % 2 == 0 &&
-        widget.currentSession < widget.sessionsBeforeLongBreak * 2) {
-      return "Break";
-    } else if (widget.currentSession == widget.sessionsBeforeLongBreak * 2) {
-      return "Long Break";
-    } else {
-      return "Work";
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +45,7 @@ class _TimerPageState extends State<TimerPage>
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              _getSessionName(),
+              widget.getSessionName(),
               style: TextStyle(
                 color: Colors.deepPurple.shade200,
                 fontWeight: FontWeight.bold,

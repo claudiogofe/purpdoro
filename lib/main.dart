@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:purpdoro/settings_page.dart';
@@ -8,6 +9,17 @@ import 'package:purpdoro/timer_page.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 void main() {
+  AwesomeNotifications().initialize(
+    'resource://drawable/logo',
+    [
+      NotificationChannel(
+        channelKey: "basic_channel",
+        channelName: "Basic Notification",
+        channelDescription: "Basic notification channel",
+      )
+    ],
+    // debug: true,
+  );
   runApp(const MyApp());
 }
 
@@ -36,8 +48,13 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    super.initState();
     pageController = PageController(initialPage: currentPage);
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
+    super.initState();
   }
 
   _playAlarmSound() async {
@@ -48,6 +65,45 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  String _getSessionName() {
+    if (_currentSession % 2 == 0 &&
+        _currentSession < _sessionsBeforeLongBreak * 2) {
+      return "Break";
+    } else if (_currentSession == _sessionsBeforeLongBreak * 2) {
+      return "Long Break";
+    } else {
+      return "Work";
+    }
+  }
+
+  _getAlarmNotification() {
+    _playAlarmSound();
+    var sessionName = _getSessionName();
+    if (sessionName == "Work") {
+      AwesomeNotifications().createNotification(
+          content: NotificationContent(
+        id: 1,
+        channelKey: "basic_channel",
+        title: "Time to work!",
+        body: "Let's get to work!",
+        displayOnBackground: true,
+        displayOnForeground: true,
+        wakeUpScreen: true,
+      ));
+    } else {
+      AwesomeNotifications().createNotification(
+          content: NotificationContent(
+        id: 2,
+        channelKey: "basic_channel",
+        title: "Take a $sessionName!",
+        body: "Chill out for a while. Maybe drink some water.",
+        displayOnBackground: true,
+        displayOnForeground: true,
+        wakeUpScreen: true,
+      ));
+    }
+  }
+
   _toggleTimer() {
     if (_paused || !_timer!.isActive) {
       setState(() {
@@ -56,7 +112,7 @@ class _MyAppState extends State<MyApp> {
       _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
         if (_remaining == 0) {
           _skipSession();
-          _playAlarmSound();
+          _getAlarmNotification();
         } else {
           setState(() {
             _remaining--;
@@ -182,6 +238,7 @@ class _MyAppState extends State<MyApp> {
                 reset: _reset,
                 skipSession: _skipSession,
                 toggleTimer: _toggleTimer,
+                getSessionName: _getSessionName,
               ),
               SettingsPage(
                 setTimers: _setTimers,
