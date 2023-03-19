@@ -6,7 +6,7 @@ Purpdoro is a simple pomodoro app written in Dart using the Flutter framework.
 
 - [x] Custom values for timer options
 - [x] Play sound
-- [ ] Notification
+- [x] Notification
 - [ ] Persistent (saved) settings
 
 ## License
