@@ -1,5 +1,7 @@
-# Purpdoro
+<img alt="Purpdoro logo" src="https://github.com/claudiogofe/purpdoro/raw/main/assets/icons/appIcon.png" width="64"/><br>
 
+# Purpdoro
+  
 Purpdoro is a simple pomodoro app written in Dart using the Flutter framework.
 
 ### To-Do List
