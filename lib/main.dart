@@ -10,7 +10,7 @@ import 'package:audioplayers/audioplayers.dart';
 
 void main() {
   AwesomeNotifications().initialize(
-    'resource://drawable/logo',
+    null,
     [
       NotificationChannel(
         channelKey: "basic_channel",
