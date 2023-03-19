@@ -1,6 +1,6 @@
 flutter_icons:
   android: true
-  adaptive_icon_background: "#673AB7"
+  adaptive_icon_background: "assets/icons/iconBackground.png"
   adaptive_icon_foreground: "assets/icons/transparentAppIcon.png"
   ios: true
   remove_alpha_ios: true
